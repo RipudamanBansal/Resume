@@ -1,4 +1,3 @@
-import "./App.css";
 import Resume from "./Resume";
 
 function App({ name }) {

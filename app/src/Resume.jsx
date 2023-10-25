@@ -1,168 +1,185 @@
-// import Button from "./Button";
-import initialRes from "./Data/resume";
-import "./Resume.css";
+import resDataBase from "./Data/resume";
+import ExpInp from "./ExpInp";
+import Input from "./Input";
 import { useState } from "react";
 
 function Resume() {
-  // making an experience db
-  const [experience, setExperience] = useState({
-    id: "",
-    expcom: "",
-    exprole: "",
-    expsy: "",
-    expey: "",
-  });
+  const [initial, setInitial] = useState(resDataBase);
+  let newInitial = { experience: [] };
 
-  //to make an initial object to store the data
-  const [initial, setInitial] = useState(initialRes);
+  const nameInp = (
+    <Input
+      type="text"
+      name="name"
+      id="name"
+      ph="Name"
+      onchange={handleChange}
+      label="YOUR NAME:"
+    ></Input>
+  );
 
-  //to make a function for a button to add following three div on click
-  //1.
+  const eduInp = (
+    <Input
+      type="text"
+      name="education"
+      id="edu"
+      label="YOUR EDUCATION:"
+      onchange={handleChange}
+      ph="Education"
+    ></Input>
+  );
+
+  const skillsInp = (
+    <Input
+      type="text"
+      name="skills"
+      id="skills"
+      onchange={handleChange}
+      ph="Skills"
+      label="YOUR SKILLS:"
+    ></Input>
+  );
+
+  const achInp = (
+    <Input
+      type="text"
+      name="achievements"
+      id="ach"
+      onchange={handleChange}
+      ph="Achievements"
+      label="YOUR ACHIEVEMENTS:"
+    ></Input>
+  );
+
   const expInput = (
     <>
-      <input
+      <Input
         type="text"
         name="company"
         id="exp"
-        placeholder="COMPANY NAME"
-        onChange={handleExp}
-      />
-      <input
+        ph="Company name"
+        onchange={handleExp}
+        label="YOUR PREVIOUS EXPERIENCE"
+      ></Input>
+      <Input
         type="text"
         name="role"
-        placeholder="YOUR ROLE"
-        onChange={handleExp}
-      />
-      <input
+        id="role"
+        ph="Role"
+        onchange={handleExp}
+      ></Input>
+      <Input
         type="text"
         name="sy"
-        placeholder="STARTING YEAR"
-        onChange={handleExp}
-      />
-      <input
+        id="sy"
+        ph="Starting Year"
+        onchange={handleExp}
+      ></Input>
+      <Input
         type="text"
         name="ey"
-        placeholder="ENDING YEAR"
-        onChange={handleExp}
-      />
+        id="ey"
+        ph="Ending year"
+        onchange={handleExp}
+      ></Input>
     </>
   );
 
-  //2.
-  const skillsInp = (
+  const form = (
     <>
-      <input type="text" name="skills" id="skills" onChange={handleChange} />
+      <form id="form">
+        {nameInp}
+        {/* <ExpInp initialList={newInitial}></ExpInp> */}
+        {expInput}
+        {achInp}
+        {eduInp}
+        {skillsInp}
+      </form>
     </>
   );
 
-  //3.
-  const eduInp = (
-    <>
-      <input type="text" name="education" id="edu" onChange={handleChange} />
-    </>
-  );
-  let newInitial = initial;
+  const [experience, setExperience] = useState({
+    id: "",
+    company: "",
+    role: "",
+    sy: "",
+    ey: "",
+  });
 
-  // functions to access input data:
+  const [output, setOutput] = useState(form);
+
   function handleChange(e) {
     newInitial[e.target.name] = e.target.value;
+    console.log(newInitial);
   }
+  // let newExperience = {};
 
   function handleExp(e) {
     let newExperience = experience;
     newExperience[e.target.name] = e.target.value;
-    newExperience.id = initial.experience.length + 1;
+    // newExperience.id = initial.experience.length + 1;
+    console.log(newExperience);
+
     setExperience({
       ...newExperience,
     });
   }
 
+  let formShown = undefined;
   function handleSubmit(e) {
     e.preventDefault();
-    newInitial.experience.push(experience);
+    let subButton = document.getElementById("form");
+    if (formShown === undefined) {
+      subButton.style.display = "none";
+      formShown = false;
+      newInitial.experience.push(experience);
+    } else if (formShown === false) {
+      formShown = true;
+      subButton.style.display = "inline";
+    } else if (formShown === true) {
+      subButton.style.display = "none";
+      formShown = false;
+    }
+    console.log(newInitial);
+    // newInitial.experience.push(experience);
+    // console.log(newInitial);
+    /*
     setInitial({ ...newInitial });
-    console.log(initial);
 
-    setOutput(
-      <div>
-        <h1>Name: {initialRes.name}</h1>
-        <h2>Education: {initialRes.education}</h2>
-        <h2>
-          Experience:{" "}
-          {initialRes.experience.map((exp) => {
-            return (
-              <div>
-                Previous Company: {exp.company} <br />
-                Role: {exp.role} <br />
-                Starting year: {exp.sy} <br />
-                Ending Year: {exp.ey} <br />
-              </div>
-            );
-          })}
-        </h2>
-        <h2>Achievements: {initialRes.achievements}</h2>
-        <h2>skills: {initialRes.skills}</h2>
-      </div>
+    const resOutput = (
+      <>
+        <div>
+          <h1>Name: {resDataBase.name}</h1>
+          <h2>Education: {resDataBase.education}</h2>
+          <h2>
+            Experience:{" "}
+            {resDataBase.experience.map((exp) => {
+              return (
+                <div>
+                  Previous Company: {exp.company} <br />
+                  Role: {exp.role} <br />
+                  Starting year: {exp.sy} <br />
+                  Ending Year: {exp.ey} <br />
+                </div>
+              );
+            })}
+          </h2>
+          <h2>Achievements: {resDataBase.achievements}</h2>
+          <h2>skills: {resDataBase.skills}</h2>
+        </div>
+        <button onClick={handleSubmit}>Update Button</button>
+      </>
     );
+    setOutput(resOutput);
+ */
   }
 
-  // to stop buffering on click for new buttons {experimental}
-  function stopBuffer(e) {
-    e.preventDefault();
-  }
-
-  // to add div for exp, skills etc.
-  function addDiv(e, toAdd) {
-    e.preventDefault();
-    return <>{toAdd}</>;
-  }
-
-  // a form to fill your info for resume
-  const [output, setOutput] = useState(
+  return (
     <>
-      <form>
-        <label htmlFor="name">YOUR NAME:</label>
-        <input type="text" name="name" id="name" onChange={handleChange} />
-        <br />
-        <br />
-
-        <label htmlFor="exp">YOUR PREVIOUS EXPERIENCE:</label>
-        {expInput}
-        {/* <button
-          onClick={(e) => {
-            e.preventDefault()
-            return { expInput };
-          }}
-        >
-          Add more Experience
-        </button> */}
-        <br />
-        <br />
-        <label htmlFor="ach">YOUR ACHIEVENMENTS:</label>
-        <input
-          type="text"
-          name="achievements"
-          id="ach"
-          onChange={handleChange}
-        />
-        <br />
-        <br />
-
-        <label htmlFor="edu">YOUR EDUCATION:</label>
-        {eduInp}
-        <br />
-        <br />
-
-        <label htmlFor="skills">YOUR SKILLS:</label>
-        {skillsInp}
-        <br />
-        <br />
-
-        <input type="submit" value="Submit" onClick={handleSubmit} />
-      </form>
+      {output}
+      <button onClick={handleSubmit}>Submit</button>
     </>
   );
-  return <>{output}</>;
 }
 
 export default Resume;
